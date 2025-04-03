@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Tart"
 include(":app")
+include(":core:network")
