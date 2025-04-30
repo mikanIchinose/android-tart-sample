@@ -50,6 +50,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.tartCore)
     implementation(libs.tartCompose)
+    implementation(libs.coilCompose)
+    implementation(libs.coilNetworkOkhttp)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
