@@ -2,8 +2,11 @@ package io.github.mikan.tart.domain
 
 import io.github.mikan.tart.core.network.model.Item
 import io.github.mikan.tart.core.network.remote.UserApi
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ArticleRepository(
+@Singleton
+class ArticleRepository @Inject constructor(
     private val userApi: UserApi,
 ) {
     suspend fun getArticles(): List<Item> {

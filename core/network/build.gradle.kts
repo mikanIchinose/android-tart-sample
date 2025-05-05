@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.openApiGenerator)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -27,6 +29,8 @@ dependencies {
     implementation(libs.okhttpLoggingInterceptor)
     implementation(libs.moshi)
     implementation(libs.moshiKotlin)
+    implementation(libs.hiltAndroid)
+    ksp(libs.hiltCompiler)
 }
 
 val apiName = "qiita"

@@ -20,6 +20,8 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Tart"
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 include(":core:network")
 include(":core:domain")
