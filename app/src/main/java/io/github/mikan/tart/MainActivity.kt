@@ -8,15 +8,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.mikan.tart.articles.ArticlesAction
 import io.github.mikan.tart.articles.ArticlesScreen
 import io.github.mikan.tart.articles.ArticlesViewModel
 import io.github.mikan.tart.ui.theme.TartTheme
+import io.yumemi.tart.compose.rememberViewStore
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -29,12 +29,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             TartTheme {
                 val viewModel: ArticlesViewModel = viewModel()
-                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                val viewStore = rememberViewStore(viewModel.store)
                 LaunchedEffect(Unit) {
-                    viewModel.getArticles()
+                    viewStore.dispatch(ArticlesAction.LoadArticles)
                 }
                 ArticlesScreen(
-                    uiState = uiState,
+                    state = viewStore.state,
+                    onUiAction = { viewStore.dispatch(it) },
                 )
             }
         }

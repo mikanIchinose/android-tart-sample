@@ -14,6 +14,14 @@ class ArticleRepository @Inject constructor(
         return items
     }
 
+    suspend fun addLike(itemId: String) {
+        userApi.createItemLike(itemId)
+    }
+
+    suspend fun removeLike(itemId: String) {
+        userApi.deleteItemLike(itemId)
+    }
+
     suspend fun isItemStock(itemId: String): Boolean {
         return userApi.isItemStock(itemId).isSuccessful
     }

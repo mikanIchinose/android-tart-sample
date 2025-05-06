@@ -17,8 +17,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -36,10 +40,12 @@ import io.github.mikan.tart.ui.PreviewContainer
 
 @Composable
 fun ArticlesScreen(
-    uiState: ArticlesUiState,
+    state: ArticlesState,
+    onUiAction: (ArticlesUiAction) -> Unit,
 ) {
-    when (uiState) {
-        is ArticlesUiState.Loading -> {
+    when (state) {
+        ArticlesState.Idle -> {}
+        is ArticlesState.Loading -> {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
@@ -48,19 +54,20 @@ fun ArticlesScreen(
             }
         }
 
-        is ArticlesUiState.Error -> {
+        is ArticlesState.Error -> {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
             ) {
-                Text(text = uiState.message)
+                Text(text = state.message)
             }
         }
 
-        is ArticlesUiState.Success -> {
+        is ArticlesState.Success -> {
             // Show articles list
             ArticleList(
-                articles = uiState.articles,
+                articles = state.articles,
+                onUiAction = onUiAction,
             )
         }
     }
@@ -69,6 +76,7 @@ fun ArticlesScreen(
 @Composable
 private fun ArticleList(
     articles: List<Article>,
+    onUiAction: (ArticlesUiAction) -> Unit,
 ) {
     Scaffold { innerPadding ->
         LazyColumn(
@@ -78,7 +86,12 @@ private fun ArticleList(
         ) {
             item { Spacer(Modifier.height(4.dp)) }
             items(articles, { it.id }) { article ->
-                ArticleItem(article)
+                ArticleItem(
+                    article = article,
+                    onClickItem = { onUiAction(ArticlesUiAction.Click(article.id)) },
+                    onAddLike = { onUiAction(ArticlesUiAction.AddLike(article.id)) },
+                    onRemoveLike = { onUiAction(ArticlesUiAction.RemoveLike(article.id)) },
+                )
             }
         }
     }
@@ -88,9 +101,13 @@ private fun ArticleList(
 @Composable
 private fun ArticleItem(
     article: Article,
+    onClickItem: () -> Unit,
+    onAddLike: () -> Unit,
+    onRemoveLike: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
+        onClick = onClickItem,
         modifier = modifier
             .fillMaxWidth()
     ) {
@@ -98,7 +115,7 @@ private fun ArticleItem(
             modifier = Modifier.padding(16.dp)
         ) {
             Row(
-                verticalAlignment = Alignment.Bottom
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 AsyncImage(
                     model = article.author.photoUrl,
@@ -108,7 +125,18 @@ private fun ArticleItem(
                         .clip(CircleShape)
                 )
                 Spacer(Modifier.width(8.dp))
-                AuthorText(article.author)
+                AuthorText(
+                    author = article.author,
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(
+                    onClick = onAddLike,
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.FavoriteBorder,
+                        contentDescription = null,
+                    )
+                }
             }
             Text(
                 text = article.title,
@@ -157,6 +185,8 @@ fun AuthorText(
             text = text,
             modifier = modifier,
         )
+    } else {
+        Box(modifier)
     }
 }
 
@@ -169,5 +199,8 @@ private fun ArticleItemPreview(
 ) = PreviewContainer {
     ArticleItem(
         article = article,
+        onClickItem = {},
+        onAddLike = {},
+        onRemoveLike = {},
     )
 }

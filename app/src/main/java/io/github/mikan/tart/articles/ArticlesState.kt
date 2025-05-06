@@ -2,19 +2,37 @@ package io.github.mikan.tart.articles
 
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import io.github.mikan.tart.core.network.model.Item
+import io.yumemi.tart.core.Action
+import io.yumemi.tart.core.Event
+import io.yumemi.tart.core.State
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import java.time.format.DateTimeFormatter
 
-sealed interface ArticlesUiState {
-    data object Loading : ArticlesUiState
-    data class Error(val message: String) : ArticlesUiState
+sealed interface ArticlesState : State {
+    data object Idle : ArticlesState
+    data object Loading : ArticlesState
+    data class Error(val message: String) : ArticlesState
     data class Success(
         val articles: List<Article>,
         val isLoading: Boolean = false,
-    ) : ArticlesUiState
+    ) : ArticlesState
+}
+
+sealed interface ArticlesAction : Action {
+    data object LoadArticles : ArticlesAction
+}
+
+sealed interface ArticlesUiAction : ArticlesAction {
+    data class Click(val itemId: String) : ArticlesUiAction
+    data class AddLike(val itemId: String) : ArticlesUiAction
+    data class RemoveLike(val itemId: String) : ArticlesUiAction
+}
+
+sealed interface ArticlesEvent : Event {
+    data class NavigateToDetail(val itemId: String) : ArticlesEvent
 }
 
 data class Article(
