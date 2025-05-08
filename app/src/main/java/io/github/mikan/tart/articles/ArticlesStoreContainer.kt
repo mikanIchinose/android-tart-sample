@@ -10,7 +10,7 @@ class ArticlesStoreContainer @Inject constructor(
     fun build(): Store<ArticlesState, ArticlesAction, ArticlesEvent> =
         Store(ArticlesState.Idle) {
             state<ArticlesState.Idle> {
-                action<ArticlesAction.LoadArticles> {
+                enter {
                     nextState(ArticlesState.Loading)
                     val articles = articleRepository.getArticles().map { it.toArticle() }
                     nextState(ArticlesState.Success(articles))

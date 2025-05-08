@@ -10,9 +10,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.mikan.tart.articles.ArticlesAction
+import io.github.mikan.tart.article.ArticleAction
+import io.github.mikan.tart.article.ArticleEvent
+import io.github.mikan.tart.article.ArticleRoute
+import io.github.mikan.tart.article.ArticleScreen
+import io.github.mikan.tart.article.ArticleViewModel
+import io.github.mikan.tart.articles.ArticlesEvent
+import io.github.mikan.tart.articles.ArticlesRoute
 import io.github.mikan.tart.articles.ArticlesScreen
 import io.github.mikan.tart.articles.ArticlesViewModel
 import io.github.mikan.tart.ui.theme.TartTheme
@@ -28,15 +38,35 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             TartTheme {
-                val viewModel: ArticlesViewModel = viewModel()
-                val viewStore = rememberViewStore(viewModel.store)
-                LaunchedEffect(Unit) {
-                    viewStore.dispatch(ArticlesAction.LoadArticles)
+                val navController = rememberNavController()
+                NavHost(navController, ArticlesRoute) {
+                    composable<ArticlesRoute> {
+                        val viewModel: ArticlesViewModel = hiltViewModel()
+                        val viewStore = rememberViewStore(viewModel.store)
+                        viewStore.handle<ArticlesEvent.NavigateToDetail> {
+                            navController.navigate(ArticleRoute(it.itemId))
+                        }
+                        ArticlesScreen(
+                            state = viewStore.state,
+                            onUiAction = { viewStore.dispatch(it) },
+                        )
+                    }
+                    composable<ArticleRoute> { backStackEntry ->
+                        val route = backStackEntry.toRoute<ArticleRoute>()
+                        val viewModel: ArticleViewModel = hiltViewModel()
+                        val viewStore = rememberViewStore(viewModel.store)
+                        viewStore.handle<ArticleEvent.NavigateBack> {
+                            navController.popBackStack()
+                        }
+                        LaunchedEffect(Unit) {
+                            viewStore.dispatch(ArticleAction.LoadArticle(route.itemId))
+                        }
+                        ArticleScreen(
+                            state = viewStore.state,
+                            onUiAction = { viewStore.dispatch(it) },
+                        )
+                    }
                 }
-                ArticlesScreen(
-                    state = viewStore.state,
-                    onUiAction = { viewStore.dispatch(it) },
-                )
             }
         }
     }

@@ -37,6 +37,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import io.github.mikan.tart.ui.PreviewContainer
+import kotlinx.serialization.Serializable
+
+@Serializable
+object ArticlesRoute
 
 @Composable
 fun ArticlesScreen(

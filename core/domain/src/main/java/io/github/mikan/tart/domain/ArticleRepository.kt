@@ -14,6 +14,11 @@ class ArticleRepository @Inject constructor(
         return items
     }
 
+    suspend fun getArticle(itemId: String): Item? {
+        val item = userApi.getItem(itemId).body()
+        return item
+    }
+
     suspend fun addLike(itemId: String) {
         userApi.createItemLike(itemId)
     }

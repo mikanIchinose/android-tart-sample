@@ -21,9 +21,7 @@ sealed interface ArticlesState : State {
     ) : ArticlesState
 }
 
-sealed interface ArticlesAction : Action {
-    data object LoadArticles : ArticlesAction
-}
+sealed interface ArticlesAction : Action
 
 sealed interface ArticlesUiAction : ArticlesAction {
     data class Click(val itemId: String) : ArticlesUiAction
