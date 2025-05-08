@@ -200,7 +200,7 @@ fun AuthorText(
 private fun ArticleItemPreview(
     @PreviewParameter(ArticleParameterProvider::class)
     article: Article,
-) = PreviewContainer {
+) = PreviewContainer(Modifier.background(MaterialTheme.colorScheme.surface).padding(16.dp)) {
     ArticleItem(
         article = article,
         onClickItem = {},
