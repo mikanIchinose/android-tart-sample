@@ -2,9 +2,12 @@ package io.github.mikan.tart.article
 
 import io.github.mikan.tart.core.network.model.Comment
 import io.github.mikan.tart.core.network.model.Item
+import io.yumemi.tart.compose.ViewStore
 import io.yumemi.tart.core.Action
 import io.yumemi.tart.core.Event
 import io.yumemi.tart.core.State
+
+typealias ArticleViewStore = ViewStore<ArticleState, ArticleAction, ArticleEvent>
 
 sealed interface ArticleState : State {
     data object Idle : ArticleState
@@ -65,9 +68,7 @@ fun Comment.toCommentUiModel(): CommentUiModel =
         body = body,
     )
 
-sealed interface ArticleAction : Action {
-    data class LoadArticle(val itemId: String) : ArticleAction
-}
+sealed interface ArticleAction : Action
 
 sealed interface ArticleUiAction : ArticleAction {
     data object ClickBack : ArticleUiAction

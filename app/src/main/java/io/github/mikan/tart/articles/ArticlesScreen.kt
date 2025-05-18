@@ -44,10 +44,9 @@ object ArticlesRoute
 
 @Composable
 fun ArticlesScreen(
-    state: ArticlesState,
-    onUiAction: (ArticlesUiAction) -> Unit,
+    viewStore: ArticlesViewStore
 ) {
-    when (state) {
+    when (val state = viewStore.state) {
         ArticlesState.Idle -> {}
         is ArticlesState.Loading -> {
             Box(
@@ -71,7 +70,7 @@ fun ArticlesScreen(
             // Show articles list
             ArticleList(
                 articles = state.articles,
-                onUiAction = onUiAction,
+                onUiAction = { viewStore.dispatch(it) },
             )
         }
     }
@@ -200,7 +199,9 @@ fun AuthorText(
 private fun ArticleItemPreview(
     @PreviewParameter(ArticleParameterProvider::class)
     article: Article,
-) = PreviewContainer(Modifier.background(MaterialTheme.colorScheme.surface).padding(16.dp)) {
+) = PreviewContainer(Modifier
+    .background(MaterialTheme.colorScheme.surface)
+    .padding(16.dp)) {
     ArticleItem(
         article = article,
         onClickItem = {},

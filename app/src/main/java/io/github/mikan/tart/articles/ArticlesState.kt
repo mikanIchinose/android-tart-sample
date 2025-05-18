@@ -2,6 +2,7 @@ package io.github.mikan.tart.articles
 
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import io.github.mikan.tart.core.network.model.Item
+import io.yumemi.tart.compose.ViewStore
 import io.yumemi.tart.core.Action
 import io.yumemi.tart.core.Event
 import io.yumemi.tart.core.State
@@ -10,6 +11,8 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import java.time.format.DateTimeFormatter
+
+typealias ArticlesViewStore = ViewStore<ArticlesState, ArticlesAction, ArticlesEvent>
 
 sealed interface ArticlesState : State {
     data object Idle : ArticlesState

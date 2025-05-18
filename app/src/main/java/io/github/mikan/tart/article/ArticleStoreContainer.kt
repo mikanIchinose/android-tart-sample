@@ -7,15 +7,15 @@ import javax.inject.Inject
 class ArticleStoreContainer @Inject constructor(
     private val articleRepository: ArticleRepository
 ) {
-    fun build(): Store<ArticleState, ArticleAction, ArticleEvent> =
+    fun build(itemId: String): Store<ArticleState, ArticleAction, ArticleEvent> =
         Store(ArticleState.Idle) {
             state<ArticleState.Idle> {
-                action<ArticleAction.LoadArticle> {
+                enter {
                     nextState(ArticleState.Loading)
                     val articleDetail =
-                        articleRepository.getArticle(action.itemId)?.toArticleDetail()
-                    val isLiked = articleRepository.isItemLiked(action.itemId)
-                    val isStocked = articleRepository.isItemStock(action.itemId)
+                        articleRepository.getArticle(itemId)?.toArticleDetail()
+                    val isLiked = articleRepository.isItemLiked(itemId)
+                    val isStocked = articleRepository.isItemStock(itemId)
                     if (articleDetail != null) {
                         nextState(
                             ArticleState.Success(
@@ -27,6 +27,9 @@ class ArticleStoreContainer @Inject constructor(
                     } else {
                         nextState(ArticleState.Error("Article not found"))
                     }
+                }
+                error<Exception> {
+                    nextState(ArticleState.Error(error.message ?: "Unknown error"))
                 }
             }
             state<ArticleState.Success> {

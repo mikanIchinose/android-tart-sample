@@ -1,5 +1,6 @@
 package io.github.mikan.tart.core.di
 
+import android.util.Log
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,5 +27,5 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideApiClient(): ApiClient = ApiClient()
+    fun provideApiClient(): ApiClient = ApiClient().setLogger { Log.d("ApiClient", it) }
 }

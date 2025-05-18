@@ -1,6 +1,6 @@
 package io.github.mikan.tart.article
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,42 +9,58 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import io.github.mikan.tart.R
 import io.github.mikan.tart.ui.PreviewContainer
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ArticleRoute(val itemId: String)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArticleScreen(
-    state: ArticleState,
-    onUiAction: (ArticleUiAction) -> Unit,
+    articleViewStore: ArticleViewStore,
+    commentsViewStore: CommentsViewStore,
 ) {
-    when (state) {
+    when (val articleState = articleViewStore.state) {
         ArticleState.Idle -> {}
         is ArticleState.Error -> {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
             ) {
-                Text(text = state.message)
+                Text(text = articleState.message)
             }
         }
 
@@ -58,59 +74,120 @@ fun ArticleScreen(
         }
 
         is ArticleState.Success -> {
-            ArticleDetail(
-                detail = state.detail,
-                onUiAction = onUiAction,
+            val sheetState = rememberModalBottomSheetState()
+            val scope = rememberCoroutineScope()
+            Scaffold(
+                floatingActionButton = {
+                    ArticleFab(
+                        {
+                            scope.launch { sheetState.expand() }
+                        },
+                        articleState.detail.commentsCount,
+                    )
+                }
+            ) { innerPadding ->
+                if (sheetState.currentValue != SheetValue.Hidden) {
+                    ModalBottomSheet(
+                        onDismissRequest = {
+                            scope.launch { sheetState.hide() }
+                        },
+                        sheetState = sheetState,
+                    ) {
+                        commentsViewStore.render<CommentsState.Success> {
+                            ArticleComments(state.comments)
+                        }
+                    }
+                }
+                ArticleDetail(
+                    detail = articleState.detail,
+                    onUiAction = { articleViewStore.dispatch(it) },
+                    modifier = Modifier.padding(innerPadding)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ArticleFab(
+    onClick: () -> Unit,
+    commentsCount: Int,
+) {
+    if (commentsCount > 0) {
+        FloatingActionButton(onClick) {
+            BadgedBox(
+                badge = {
+                    Badge(
+                        containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        contentColor = Color.White,
+                    ) {
+                        Text("$commentsCount")
+                    }
+                },
+            ) {
+                Icon(
+                    painterResource(R.drawable.ic_chat),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ArticleDetail(
+    detail: ArticleDetail,
+    onUiAction: (ArticleUiAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier.padding(horizontal = 16.dp)) {
+        Column(Modifier.verticalScroll(rememberScrollState())) {
+            Spacer(Modifier.height(48.dp))
+            Row {
+                AsyncImage(
+                    model = null,
+                    contentDescription = null,
+                )
+                Text(
+                    text = detail.title,
+                    style = MaterialTheme.typography.titleLarge,
+                )
+            }
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = detail.body,
+            )
+        }
+        Button({ onUiAction(ArticleUiAction.ClickBack) }) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = null,
             )
         }
     }
 }
 
 @Composable
-private fun ArticleDetail(
-    detail: ArticleDetail,
-    onUiAction: (ArticleUiAction) -> Unit,
+fun ArticleComments(
+    comments: List<CommentState>,
 ) {
-    Scaffold { innerPadding ->
-        Box(
-            Modifier.padding(innerPadding)
-        ) {
-            Box(
-                Modifier.padding(horizontal = 16.dp)
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        items(comments, { it.id }) {
+            Card(
+                Modifier.fillMaxWidth()
             ) {
-                Column(Modifier.verticalScroll(rememberScrollState())) {
-                    Spacer(Modifier.height(48.dp))
-                    Row {
-                        AsyncImage(
-                            model = null,
-                            contentDescription = null,
-                        )
-                        Text(
-                            text = detail.title,
-                            style = MaterialTheme.typography.titleLarge,
-                        )
-                    }
-                    Spacer(Modifier.height(8.dp))
-                    Text(
-                        text = detail.body,
-                    )
-                }
-                Button({ onUiAction(ArticleUiAction.ClickBack) }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = null,
-                    )
-                }
-            }
-            Box(
-                modifier = Modifier
-                    .height(70.dp)
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .background(Color.White)
-                    .padding(8.dp)
-            ) {
-                Text("コメント ${detail.commentsCount}")
+                Text(
+                    it.body,
+                    modifier = Modifier.padding(16.dp)
+                )
             }
         }
     }
@@ -153,4 +230,20 @@ private fun ArticleDetailPreview() = PreviewContainer {
         detail = detail,
         onUiAction = {},
     )
+}
+
+@Preview
+@Composable
+private fun ArticleCommentsPreview() = PreviewContainer {
+    val comments = listOf(
+        CommentState(
+            id = "1",
+            body = "コメント1",
+        ),
+        CommentState(
+            id = "2",
+            body = "コメント2",
+        ),
+    )
+    ArticleComments(comments)
 }

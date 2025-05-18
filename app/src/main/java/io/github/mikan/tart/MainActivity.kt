@@ -5,18 +5,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.mikan.tart.article.ArticleAction
 import io.github.mikan.tart.article.ArticleEvent
 import io.github.mikan.tart.article.ArticleRoute
 import io.github.mikan.tart.article.ArticleScreen
@@ -47,23 +40,19 @@ class MainActivity : ComponentActivity() {
                             navController.navigate(ArticleRoute(it.itemId))
                         }
                         ArticlesScreen(
-                            state = viewStore.state,
-                            onUiAction = { viewStore.dispatch(it) },
+                            viewStore = viewStore,
                         )
                     }
                     composable<ArticleRoute> { backStackEntry ->
-                        val route = backStackEntry.toRoute<ArticleRoute>()
                         val viewModel: ArticleViewModel = hiltViewModel()
-                        val viewStore = rememberViewStore(viewModel.store)
-                        viewStore.handle<ArticleEvent.NavigateBack> {
+                        val articleViewStore = rememberViewStore(viewModel.articleStore)
+                        val commentsViewStore = rememberViewStore(viewModel.commentsScore)
+                        articleViewStore.handle<ArticleEvent.NavigateBack> {
                             navController.popBackStack()
                         }
-                        LaunchedEffect(Unit) {
-                            viewStore.dispatch(ArticleAction.LoadArticle(route.itemId))
-                        }
                         ArticleScreen(
-                            state = viewStore.state,
-                            onUiAction = { viewStore.dispatch(it) },
+                            articleViewStore = articleViewStore,
+                            commentsViewStore = commentsViewStore,
                         )
                     }
                 }
@@ -72,18 +61,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TartTheme {
-        Greeting("Android")
-    }
-}

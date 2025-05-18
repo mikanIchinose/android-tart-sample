@@ -1,5 +1,6 @@
 package io.github.mikan.tart.domain
 
+import io.github.mikan.tart.core.network.model.Comment
 import io.github.mikan.tart.core.network.model.Item
 import io.github.mikan.tart.core.network.remote.UserApi
 import javax.inject.Inject
@@ -29,5 +30,14 @@ class ArticleRepository @Inject constructor(
 
     suspend fun isItemStock(itemId: String): Boolean {
         return userApi.isItemStock(itemId).isSuccessful
+    }
+
+    suspend fun isItemLiked(itemId: String): Boolean {
+        return userApi.isItemLike(itemId).isSuccessful
+    }
+
+    suspend fun getComments(itemId: String): List<Comment> {
+        val comments = userApi.getItemComments(itemId).body().orEmpty()
+        return comments
     }
 }
