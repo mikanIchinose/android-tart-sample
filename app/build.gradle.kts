@@ -72,4 +72,5 @@ dependencies {
     implementation(libs.hiltAndroid)
     implementation(libs.kotlinxDateTime)
     ksp(libs.hiltCompiler)
+    testImplementation(libs.coroutinesTest)
 }
