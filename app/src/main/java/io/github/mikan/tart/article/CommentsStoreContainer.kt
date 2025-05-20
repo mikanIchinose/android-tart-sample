@@ -12,6 +12,10 @@ class CommentsStoreContainer @Inject constructor(
             state<CommentsState.Idle> {
                 enter {
                     nextState(CommentsState.Loading)
+                }
+            }
+            state<CommentsState.Loading> {
+                enter {
                     val comments = articleRepository.getComments(itemId)
                         .map { it.toState() }
                         .reversed()

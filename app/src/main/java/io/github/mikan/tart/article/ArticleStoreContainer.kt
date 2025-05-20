@@ -12,6 +12,10 @@ class ArticleStoreContainer @Inject constructor(
             state<ArticleState.Idle> {
                 enter {
                     nextState(ArticleState.Loading)
+                }
+            }
+            state<ArticleState.Loading> {
+                enter {
                     val articleDetail =
                         articleRepository.getArticle(itemId)?.toArticleDetail()
                     val isLiked = articleRepository.isItemLiked(itemId)

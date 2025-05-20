@@ -15,6 +15,10 @@ class ArticlesStoreContainer @Inject constructor(
             state<ArticlesState.Idle> {
                 enter {
                     nextState(ArticlesState.Loading)
+                }
+            }
+            state<ArticlesState.Loading> {
+                enter {
                     val articles = articleRepository.getArticles().map {
                         val isLike = articleRepository.isItemLiked(it.id)
                         it.toArticle(isLike)
