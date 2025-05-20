@@ -20,7 +20,10 @@ class ArticlesStoreContainer @Inject constructor(
             state<ArticlesState.Idle> {
                 enter {
                     nextState(ArticlesState.Loading)
-                    val articles = articleRepository.getArticles().map { it.toArticle() }
+                    val articles = articleRepository.getArticles().map {
+                        val isLike = articleRepository.isItemLiked(it.id)
+                        it.toArticle(isLike)
+                    }
                     nextState(ArticlesState.Success(articles))
                 }
             }
@@ -30,13 +33,31 @@ class ArticlesStoreContainer @Inject constructor(
                 }
                 action<ArticlesUiAction.AddLike> {
                     articleRepository.addLike(action.itemId)
-                    val articles = articleRepository.getArticles().map { it.toArticle() }
-                    nextState(state.copy(articles))
+                    val newArticles = state.articles.map {
+                        if (it.id == action.itemId) {
+                            it.copy(
+                                likesCount = it.likesCount + 1,
+                                isLike = true,
+                            )
+                        } else {
+                            it
+                        }
+                    }
+                    nextState(state.copy(newArticles))
                 }
                 action<ArticlesUiAction.RemoveLike> {
                     articleRepository.removeLike(action.itemId)
-                    val articles = articleRepository.getArticles().map { it.toArticle() }
-                    nextState(state.copy(articles))
+                    val newArticles = state.articles.map {
+                        if (it.id == action.itemId) {
+                            it.copy(
+                                likesCount = it.likesCount - 1,
+                                isLike = false,
+                            )
+                        } else {
+                            it
+                        }
+                    }
+                    nextState(state.copy(newArticles))
                 }
             }
         }

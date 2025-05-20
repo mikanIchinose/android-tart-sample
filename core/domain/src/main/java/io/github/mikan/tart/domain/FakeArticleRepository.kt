@@ -127,7 +127,7 @@ class FakeArticleRepository(
 
     override suspend fun isItemLiked(itemId: String): Boolean {
         if (!shouldSucceed) throw Exception("Failed to check like")
-        TODO("Not yet implemented")
+        return false
     }
 
     override suspend fun getComments(itemId: String): List<Comment> {

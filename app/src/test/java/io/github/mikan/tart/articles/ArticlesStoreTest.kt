@@ -34,6 +34,7 @@ class ArticlesStoreTest {
                     tags = emptyList(),
                     createdAt = "2025/01/01",
                     updatedAt = "2025/01/01",
+                    isLike = false,
                 ),
                 Article(
                     id = "2",
@@ -47,6 +48,7 @@ class ArticlesStoreTest {
                     tags = emptyList(),
                     createdAt = "2025/01/01",
                     updatedAt = "2025/01/01",
+                    isLike = false,
                 ),
                 Article(
                     id = "3",
@@ -60,6 +62,7 @@ class ArticlesStoreTest {
                     tags = emptyList(),
                     createdAt = "2025/01/01",
                     updatedAt = "2025/01/01",
+                    isLike = false,
                 ),
             )
         )

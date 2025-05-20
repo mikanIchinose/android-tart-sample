@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.openApiGenerator)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.secretGradlePlugin)
 }
 
 android {
@@ -19,6 +20,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 

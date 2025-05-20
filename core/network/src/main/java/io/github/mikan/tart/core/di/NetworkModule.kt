@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.github.mikan.tart.core.network.BuildConfig
 import io.github.mikan.tart.core.network.infrastructure.ApiClient
 import io.github.mikan.tart.core.network.remote.TeamApi
 import io.github.mikan.tart.core.network.remote.UserApi
@@ -27,5 +28,10 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideApiClient(): ApiClient = ApiClient().setLogger { Log.d("ApiClient", it) }
+    fun provideApiClient(): ApiClient =
+        ApiClient(
+            authName = "Bearer",
+            bearerToken = BuildConfig.QiitaAccessToken,
+        )
+            .setLogger { Log.d("ApiClient", it) }
 }

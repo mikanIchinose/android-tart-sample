@@ -44,6 +44,7 @@ data class Article(
     val tags: List<String>,
     val createdAt: String,
     val updatedAt: String,
+    val isLike: Boolean,
 )
 
 data class Author(
@@ -52,7 +53,7 @@ data class Author(
     val group: String?,
 )
 
-fun Item.toArticle(): Article {
+fun Item.toArticle(isLike: Boolean): Article {
     return Article(
         id = id,
         author = Author(
@@ -65,6 +66,7 @@ fun Item.toArticle(): Article {
         tags = tags.map { it.name },
         createdAt = createdAt.formatDate(),
         updatedAt = updatedAt.formatDate(),
+        isLike = isLike,
     )
 }
 
@@ -89,6 +91,7 @@ class ArticleParameterProvider : CollectionPreviewParameterProvider<Article>(
             tags = emptyList(),
             createdAt = "2025/01/01",
             updatedAt = "2025/01/10",
+            isLike = false,
         ),
         Article(
             id = "1",
@@ -105,6 +108,7 @@ class ArticleParameterProvider : CollectionPreviewParameterProvider<Article>(
             ),
             createdAt = "2025/01/01",
             updatedAt = "2025/01/10",
+            isLike = true,
         ),
         Article(
             id = "1",
@@ -125,6 +129,7 @@ class ArticleParameterProvider : CollectionPreviewParameterProvider<Article>(
             ),
             createdAt = "2025/01/01",
             updatedAt = "2025/01/10",
+            isLike = true,
         ),
     ),
 )

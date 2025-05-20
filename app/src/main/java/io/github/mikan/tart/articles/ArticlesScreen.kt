@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -132,13 +133,24 @@ private fun ArticleItem(
                     author = article.author,
                     modifier = Modifier.weight(1f)
                 )
-                IconButton(
-                    onClick = onAddLike,
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = null,
-                    )
+                if (article.isLike) {
+                    IconButton(
+                        onClick = onRemoveLike,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = null,
+                        )
+                    }
+                } else {
+                    IconButton(
+                        onClick = onAddLike,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.FavoriteBorder,
+                            contentDescription = null,
+                        )
+                    }
                 }
             }
             Text(
