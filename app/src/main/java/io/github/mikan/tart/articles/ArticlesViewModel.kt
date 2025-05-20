@@ -9,4 +9,7 @@ class ArticlesViewModel @Inject constructor(
     articlesStateContainer: ArticlesStoreContainer,
 ) : ViewModel() {
     val store = articlesStateContainer.build()
+    override fun onCleared() {
+        store.dispose()
+    }
 }
