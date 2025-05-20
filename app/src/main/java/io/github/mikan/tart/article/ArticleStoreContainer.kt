@@ -28,13 +28,15 @@ class ArticleStoreContainer @Inject constructor(
                         nextState(ArticleState.Error("Article not found"))
                     }
                 }
-                error<Exception> {
-                    nextState(ArticleState.Error(error.message ?: "Unknown error"))
-                }
             }
             state<ArticleState.Success> {
                 action<ArticleUiAction.ClickBack> {
                     event(ArticleEvent.NavigateBack)
+                }
+            }
+            state<ArticleState> {
+                error<Exception> {
+                    nextState(ArticleState.Error(error.message ?: "Unknown error"))
                 }
             }
         }

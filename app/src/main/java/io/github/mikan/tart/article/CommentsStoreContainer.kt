@@ -17,6 +17,8 @@ class CommentsStoreContainer @Inject constructor(
                         .reversed()
                     nextState(CommentsState.Success(comments))
                 }
+            }
+            state<CommentsState> {
                 error<Exception> {
                     nextState(CommentsState.Error(error.message ?: "Unknown error"))
                 }

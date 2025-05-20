@@ -12,11 +12,6 @@ class ArticlesStoreContainer @Inject constructor(
     fun build(): Store<ArticlesState, ArticlesAction, ArticlesEvent> =
         Store(ArticlesState.Idle) {
             coroutineContext(dispatcher)
-            state<ArticlesState> {
-                error<Exception> {
-                    nextState(ArticlesState.Error(error.message ?: "Unknown error"))
-                }
-            }
             state<ArticlesState.Idle> {
                 enter {
                     nextState(ArticlesState.Loading)
@@ -58,6 +53,12 @@ class ArticlesStoreContainer @Inject constructor(
                         }
                     }
                     nextState(state.copy(newArticles))
+                }
+            }
+            // global error handler
+            state<ArticlesState> {
+                error<Exception> {
+                    nextState(ArticlesState.Error(error.message ?: "Unknown error"))
                 }
             }
         }
