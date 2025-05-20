@@ -10,8 +10,10 @@ import javax.inject.Singleton
 internal class DefaultArticleRepository @Inject constructor(
     private val userApi: UserApi,
 ) : ArticleRepository {
+    private var items = emptyList<Item>()
     override suspend fun getArticles(): List<Item> {
-        val items = userApi.getItems().body().orEmpty()
+        if (items.isNotEmpty()) return items
+        items = userApi.getItems(perPage = 10).body().orEmpty()
         return items
     }
 
