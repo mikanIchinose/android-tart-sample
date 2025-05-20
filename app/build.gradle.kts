@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.tartCompose)
     implementation(libs.coilCompose)
     implementation(libs.coilNetworkOkhttp)
+    implementation(libs.composeMarkdown)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidxNavigationCompose)

@@ -39,6 +39,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import dev.jeziellago.compose.markdowntext.MarkdownText
 import io.github.mikan.tart.R
 import io.github.mikan.tart.ui.PreviewContainer
 import kotlinx.coroutines.launch
@@ -157,9 +158,7 @@ private fun ArticleDetail(
                 )
             }
             Spacer(Modifier.height(8.dp))
-            Text(
-                text = detail.body,
-            )
+            MarkdownText(detail.body)
         }
         Button({ onUiAction(ArticleUiAction.ClickBack) }) {
             Icon(
@@ -177,14 +176,13 @@ fun ArticleComments(
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
-            .fillMaxSize()
             .padding(16.dp)
     ) {
         items(comments, { it.id }) {
             Card(
                 Modifier.fillMaxWidth()
             ) {
-                Text(
+                MarkdownText(
                     it.body,
                     modifier = Modifier.padding(16.dp)
                 )

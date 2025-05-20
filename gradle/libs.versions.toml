@@ -18,6 +18,7 @@ coil = "3.2.0"
 kotlinxSerialization = "1.8.1"
 kotlinxDateTime = "0.6.2"
 coroutines = "1.10.2"
+composeMarkdown = "0.5.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -48,6 +49,7 @@ coilCompose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref =
 coilNetworkOkhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 kotlinxDateTime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDateTime" }
 coroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+composeMarkdown = { group = "com.github.jeziellago", name = "compose-markdown", version.ref = "composeMarkdown" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
