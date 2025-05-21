@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidxMaterialIconsCore)
     implementation(libs.tartCore)
     implementation(libs.tartCompose)
     implementation(libs.coilCompose)
@@ -62,8 +63,17 @@ dependencies {
     implementation(libs.composeMarkdown)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Navigation 2
     implementation(libs.androidxNavigationCompose)
     implementation(libs.hiltNavigationCompose)
+
+    // Navigation 3
+    implementation(libs.androidxNavigation3Runtime)
+    implementation(libs.androidxNavigation3Ui)
+    implementation(libs.androidxMaterial3Navigation3)
+    implementation(libs.androidxLifecycleViewmodelNavigation3)
+
     implementation(libs.kotlinxSerializationJson)
     implementation(libs.hiltAndroid)
     implementation(libs.kotlinxDateTime)

@@ -6,6 +6,10 @@ coreKtx = "1.16.0"
 hilt = "2.56.2"
 hiltNavigationCompose = "1.2.0"
 navigation = "2.9.0"
+navigation3 = "1.0.0-alpha01"  # Navigation 3 のバージョン
+navigation3Lifecycle = "1.0.0-SNAPSHOT"
+navigation3Material = "1.0.0-SNAPSHOT"
+material3 = "1.4.0-alpha15"
 lifecycle = "2.9.0"
 activityCompose = "1.10.1"
 composeBom = "2025.05.00"
@@ -32,7 +36,8 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+androidxMaterialIconsCore = { group = "androidx.compose.material", name = "material-icons-core" }
 androidxNavigationCompose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hiltCompiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
@@ -51,6 +56,12 @@ coilNetworkOkhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", 
 kotlinxDateTime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDateTime" }
 coroutinesTest = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 composeMarkdown = { group = "com.github.jeziellago", name = "compose-markdown", version.ref = "composeMarkdown" }
+
+# Navigation 3 ライブラリ
+androidxNavigation3Runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
+androidxNavigation3Ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
+androidxMaterial3Navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "navigation3Material" }
+androidxLifecycleViewmodelNavigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "navigation3Lifecycle" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

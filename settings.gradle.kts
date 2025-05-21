@@ -19,6 +19,10 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://jitpack.io")
         }
+        // スナップショットビルド用のリポジトリ
+        maven {
+            url = uri("https://androidx.dev/snapshots/builds/13508953/artifacts/repository")
+        }
     }
 }
 
