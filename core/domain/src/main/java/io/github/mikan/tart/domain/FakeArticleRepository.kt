@@ -122,7 +122,7 @@ class FakeArticleRepository(
 
     override suspend fun isItemStock(itemId: String): Boolean {
         if (!shouldSucceed) throw Exception("Failed to check stock")
-        TODO("Not yet implemented")
+        return false
     }
 
     override suspend fun isItemLiked(itemId: String): Boolean {
