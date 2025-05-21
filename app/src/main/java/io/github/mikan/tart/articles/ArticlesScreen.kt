@@ -36,12 +36,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import coil3.compose.AsyncImage
 import io.github.mikan.tart.ui.PreviewContainer
 import kotlinx.serialization.Serializable
 
 @Serializable
-object ArticlesRoute
+object ArticlesRoute : NavKey
 
 @Composable
 fun ArticlesScreen(

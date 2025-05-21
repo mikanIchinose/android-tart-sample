@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import coil3.compose.AsyncImage
 import dev.jeziellago.compose.markdowntext.MarkdownText
 import io.github.mikan.tart.R
@@ -46,7 +47,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ArticleRoute(val itemId: String)
+data class ArticleRoute(val itemId: String) : NavKey
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
