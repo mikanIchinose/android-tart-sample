@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "io.github.mikan.tart"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "io.github.mikan.tart"
